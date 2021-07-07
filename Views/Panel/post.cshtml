@@ -1,0 +1,13 @@
+﻿@model Post
+
+<h1 class="display-4">@Model.Title</h1>
+<p class="text-muted">@Model.CreatedAt</p>
+
+@if (!string.IsNullOrEmpty(Model.Image) )
+{
+    <img src="/images/@Model.Image" />
+}
+
+<p>
+    @Model.Body
+</p>

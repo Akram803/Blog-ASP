@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Post>
+
+<h1 class="display-4">Admin Panel</h1>
+
+<a class="text-dark" asp-controller="panel" asp-action="edit">Create Post</a>
+<br />
+<br />
+
+
+
+<div class="container">
+    <div class="row ">
+        @foreach (var post in Model)
+        {
+            <div class="col-12 col-lg-6 ">
+
+                <div class="card mb-3" style="height:150px;">
+                    <div class="row no-gutters">
+
+                        <div class="col">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a asp-controller="panel" asp-action="post" asp-route-id="@post.Id">
+                                        @post.Title
+                                    </a>
+                                </h5>
+                                <p class="card-text">
+                                    @post.Body.Substring(0, @post.Body.Length > 50 ? 50 : @post.Body.Length)
+                                </p>
+                                <p class="card-text p-0">
+                                    <small class="text-muted">created @post.CreatedAt</small>
+                                    <a class="text-info" asp-controller="panel" asp-action="edit" asp-route-id="@post.Id">edit</a>
+                                    <a class="text-danger" asp-controller="panel" asp-action="delete" asp-route-id="@post.Id">delete</a>
+                                </p>
+
+                            </div>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(post.Image))
+                        {
+                            <div class="col-4 " style="height: 150px;">
+                                <img src="/images/@post.Image" class="card-img " style="height: 146px;">
+                            </div>
+                        }
+
+
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+
+</div>

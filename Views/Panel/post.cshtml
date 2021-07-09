@@ -1,13 +1,19 @@
 ﻿@model Post
 
-<h1 class="display-4">@Model.Title</h1>
-<p class="text-muted">@Model.CreatedAt</p>
+<div class="row justify-content-center">
+    <center class="col col-md-9 ">
 
-@if (!string.IsNullOrEmpty(Model.Image) )
-{
-    <img src="/images/@Model.Image" />
-}
-
-<p>
-    @Model.Body
-</p>
+        <h1 class="display-4">@Model.Title</h1>
+        <p class="text-muted">@Model.CreatedAt</p>
+        <br />
+        @if (!string.IsNullOrEmpty(Model.Image))
+        {
+            <img src="/images/@Model.Image" class="w-100" />
+        }
+        <br />
+        <br />
+        <p class="h5">
+            @Html.Raw(Model.Body)
+        </p>
+    </center>
+</div>

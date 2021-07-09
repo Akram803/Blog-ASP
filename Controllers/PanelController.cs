@@ -15,37 +15,43 @@ namespace Blog.Controllers
     [Authorize]
     public class PanelController : Controller
     {
-        private IRepository _repo;
+        private PostRepository _postRepo;
+        private CategoryRepository _categoryRepo;
         private IFileManager _fileManager;
 
-        public PanelController(IRepository repository, IFileManager fileManager)
+        public PanelController(
+                                PostRepository postRepo, 
+                                CategoryRepository catRepo, 
+                                IFileManager fileManager
+                                )
         {
-            _repo = repository;
+            _postRepo = postRepo;
+            _categoryRepo = catRepo;
             _fileManager = fileManager;
         }
 
         public async Task<IActionResult> Index()
         {
             return View(
-                await _repo.GetAllPosts()
+                await _postRepo.GetAll()
                 );
         }
 
         [HttpGet]
         public async Task<IActionResult> Post(int id)
         {
-
-            return View(
-                await _repo.GetPost(id)
-                );
+            var post = await _postRepo.GetById(id);
+            return View(post);
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewData["cats"] = await _categoryRepo.Getall();
+
             if (id != null)
             {
-                var post = await _repo.GetPost((int)id);
+                var post = await _postRepo.GetById((int)id);
                 return View(
                     new PostViewModel
                     {
@@ -68,32 +74,26 @@ namespace Blog.Controllers
                 Id = vm.Id,
                 Title = vm.Title,
                 Body = vm.Body,
+                CategoryId = vm.CatrgoryId,
                 Image = vm.ImageName
             };
+
+            if (vm.ImageObj != null)
+            {
+                if (!string.IsNullOrEmpty(vm.ImageName))
+                    _fileManager.ImageDelete(vm.ImageName);
+
+                post.Image = await _fileManager.ImageSave(vm.ImageObj);
+            }
+
             // creation 
             if (post.Id == 0)
-            {
-                if(vm.ImageObj != null)
-                    post.Image = await _fileManager.ImageSave(vm.ImageObj); // save image whatever
-                _repo.AddPost(post);
-            }
+                await _postRepo.Add(post);
             // update
             else
-            {
-                // if image name is diffrent : delete the olde one then save the new one
-                // if image name is same : don't
-                if(vm.ImageObj != null )
-                {
-                    if(!string.IsNullOrEmpty(vm.ImageName))
-                        _fileManager.ImageDelete(vm.ImageName);
+                _postRepo.Update(post);
 
-                    post.Image = await _fileManager.ImageSave(vm.ImageObj);
-                }
-                _repo.UpdatePost(post);
-            }
-
-
-            if (await _repo.SaveChanges())
+            if (await _postRepo.SaveChanges())
                 return RedirectToAction("Index");
             else
                 return View(post);
@@ -103,17 +103,16 @@ namespace Blog.Controllers
         [HttpGet]
         public async Task<IActionResult> delete(int id) 
         {
-            var post = await _repo.GetPost(id);
+            var post = await _postRepo.GetById(id);
 
             if( !string.IsNullOrEmpty(post.Image) )
                 _fileManager.ImageDelete(post.Image);
 
-            await _repo.RemovePost(post);
-            await _repo.SaveChanges();
+            _postRepo.Remove(post);
+            await _postRepo.SaveChanges();
 
             return RedirectToAction("index", "panel");
         }
 
-       
     }
 }

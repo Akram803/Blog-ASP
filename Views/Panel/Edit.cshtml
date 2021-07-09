@@ -1,27 +1,42 @@
 ﻿@model PostViewModel
 
-<div>
+<link href="~/lib/Trumbowyg-main/dist/ui/trumbowyg.css" rel="stylesheet" />
+
+<div class="w-75 m-auto">
     <form method="post" enctype="multipart/form-data">
+
         <input asp-for="Id" hidden />
+        <input asp-for="@Model.ImageName" hidden />
+
+        <div class="form-group">
+            <label > Category </label><br />
+            <select name="CatrgoryId">
+                @foreach (var cat in (List<Category>)ViewData["cats"])
+                {
+                    <option value="@cat.Id">@cat.Name</option>
+                }
+            </select>
+        </div>
+
         <div class="form-group">
             <label asp-for="Title"></label><br />
-            <input asp-for="Title" class="form-control"/>
+            <input asp-for="Title" class="form-control" />
         </div>
 
         <div class="form-group">
             <label asp-for="Body"></label><br />
-            <input asp-for="Body"class="form-control" />
+            <textarea id="editor" asp-for="Body" class="form-control"></textarea>
         </div>
 
-        @if (!string.IsNullOrEmpty(Model.ImageName)) 
-        { 
+        @if (!string.IsNullOrEmpty(Model.ImageName))
+        {
             <div class="form-group">
-                <img src="/images/@Model.ImageName" class="w-50"/>
+                <img src="/images/@Model.ImageName" class="w-50" />
             </div>
 
         }
 
-        <input asp-for="@Model.ImageName"  hidden/>
+
 
         <div class="form-group">
             <label>change image</label>
@@ -31,3 +46,11 @@
         <input type="submit" value="Post" />
     </form>
 </div>
+
+@section Scripts{
+    <script src="~/lib/Trumbowyg-main/dist/trumbowyg.js"></script>
+    <script>
+        $('#editor').trumbowyg();
+    </script>
+}
+

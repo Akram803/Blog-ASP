@@ -18,4 +18,16 @@
     <Folder Include="wwwroot\blog\images\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\lib\Trumbowyg-main\.github\FUNDING.yml" />
+    <None Include="wwwroot\lib\Trumbowyg-main\.github\ISSUE_TEMPLATE.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Panel\post.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

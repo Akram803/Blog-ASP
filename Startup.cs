@@ -46,7 +46,10 @@ namespace Blog
                 config.LogoutPath = "/auth/logout";
             });
 
-            services.AddScoped<IRepository, Repository>();
+            services.AddScoped<PostRepository>();
+            services.AddScoped<CommentRepository>();
+            services.AddScoped<CategoryRepository>();
+
             services.AddTransient<IFileManager, FileManager>();
         }
 

@@ -4,6 +4,8 @@
 
 <a class="text-dark" asp-controller="panel" asp-action="edit">Create Post</a>
 <br />
+<a class="" asp-controller="Category" asp-action="index">Categories</a>
+<br />
 <br />
 
 
@@ -24,14 +26,14 @@
                                         @post.Title
                                     </a>
                                 </h5>
-                                <p class="card-text">
+                                <p class="post-body card-text">
                                     @post.Body.Substring(0, @post.Body.Length > 50 ? 50 : @post.Body.Length)
                                 </p>
-                                <p class="card-text p-0">
+                                <div>
                                     <small class="text-muted">created @post.CreatedAt</small>
                                     <a class="text-info" asp-controller="panel" asp-action="edit" asp-route-id="@post.Id">edit</a>
                                     <a class="text-danger" asp-controller="panel" asp-action="delete" asp-route-id="@post.Id">delete</a>
-                                </p>
+                                </div>
 
                             </div>
                         </div>
@@ -52,3 +54,13 @@
     </div>
 
 </div>
+
+
+@section Scripts{
+    <script>
+            //$('.post-body').forEach(el => {
+            //    console.log(el)
+            //})
+
+    </script>
+}

@@ -2,6 +2,8 @@
 using Blog.Data.FileMangers;
 using Blog.Data.Repositories;
 using Blog.Models;
+using Blog.Models.Comment;
+using Blog.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,19 +15,19 @@ namespace Blog.Controllers
 {
     public class HomeController : Controller
     {
-        private IRepository _repo;
+        private PostRepository _postRepo;
         private IFileManager _fileManager;
 
-        public HomeController(IRepository repository, IFileManager fileManager)
+        public HomeController(PostRepository repository, IFileManager fileManager)
         {
-            _repo = repository;
+            _postRepo = repository;
             _fileManager = fileManager;
         }
 
         public async Task<IActionResult> Index()
         {
             return View(
-                await _repo.GetAllPosts()
+                await _postRepo.GetAll()
                 );
         }
 
@@ -33,9 +35,10 @@ namespace Blog.Controllers
         public async Task<IActionResult> Post(int id)
         {
             return View(
-                await _repo.GetPost(id)
+                await _postRepo.GetById(id)
                 ) ;
         }
+
 
         [HttpGet("/images/{name}")]
         public IActionResult Image(string name)
@@ -43,5 +46,7 @@ namespace Blog.Controllers
             var type = name.Substring(name.IndexOf(".") + 1);
             return new FileStreamResult(_fileManager.ImageStream(name), $"image/{type}");
         }
+
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Blog.Models.Comment;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -15,8 +16,15 @@ namespace Blog.Models
         public string Title { get; set; } = "";
         [DisplayName("what do you think")]
         public string Body { get; set; } = "";
-        public string Image { get; set; } = ""; 
+        public string Image { get; set; } = "";
+
+        public string Tags { get; set; } = "";
+        public string Description { get; set; } = "";
 
         public DateTime CreatedAt { get; set; } = DateTime.Now ;
-    }
+
+        public int CategoryId { get; set; }
+
+        public List<MainComment> MainComments { get; set; }
+    } 
 }

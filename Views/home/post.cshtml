@@ -1,9 +1,11 @@
 ﻿@model Post
 
 <div class="row justify-content-center">
-    <center class="col col-md-9 ">
+    <div class="col col-md-9 w-100">
+
 
         <h1 class="display-4">@Model.Title</h1>
+        <p class="text-muted"></p>
         <p class="text-muted">@Model.CreatedAt</p>
         <br />
         @if (!string.IsNullOrEmpty(Model.Image))
@@ -13,7 +15,37 @@
         <br />
         <br />
         <p class="h5">
-            @Model.Body
+            @Html.Raw(Model.Body)
         </p>
-    </center>
+
+    </div>
+</div>
+
+<hr />
+
+<div class="row justify-content-center">
+    <div id="main-comment-form" class="col col-md-9 ">
+        @{
+            await Html.RenderPartialAsync("_CommentForm", new CommentViewModel { PostId = Model.Id });
+        }
+    </div>
+
+    <div class="col col-md-9 ">
+        @foreach (var mainComment in Model.MainComments)
+        {
+            <hr class="w-50" />
+            <small class="text-muted">@mainComment.CreatedAt</small>
+            <p>@mainComment.message</p>
+
+            <div class="ml-5">
+                @foreach (var subComment in mainComment.SubComments)
+                {
+                <small class="text-muted">@subComment.CreatedAt</small>
+                <p>@subComment.message</p>
+                }
+            </div>
+
+            await Html.RenderPartialAsync("_CommentForm", new CommentViewModel { PostId = Model.Id, MainCommentId = mainComment.Id });
+        }
+    </div>
 </div>

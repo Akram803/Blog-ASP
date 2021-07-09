@@ -1,0 +1,19 @@
+﻿@model IEnumerable<Category>
+
+
+<form asp-controller="Category" asp-action="Create">
+    <input name="name" required asp-fo/>
+    <button type="submit">Add</button>
+</form>
+
+<ul>
+    @foreach(var cat in Model)
+    {
+        <li>
+            @cat.Name 
+            <small>
+                <a asp-controller="Category" asp-action="Remove" asp-route-id="@cat.Id">delete</a>
+            </small>
+        </li>
+    }
+</ul>

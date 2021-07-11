@@ -1,4 +1,6 @@
-﻿using Blog.ViewModels;
+﻿using AutoMapper;
+using Blog.Services.Email;
+using Blog.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,10 +14,21 @@ namespace Blog.Controllers
     public class AuthController : Controller
     {
         private SignInManager<IdentityUser> _signInManager;
+        private UserManager<IdentityUser> _userManager;
+        private EmailService _emailService;
+        private IMapper _mapper;
 
-        public AuthController(SignInManager<IdentityUser> signInManager)
+        public AuthController(
+            IMapper mapper,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager,
+            EmailService emailService
+            )
         {
+            _mapper = mapper;
             _signInManager = signInManager;
+            _userManager = userManager;
+            _emailService = emailService;
         }
 
         public IActionResult Login()
@@ -27,6 +40,7 @@ namespace Blog.Controllers
         public async Task<IActionResult> Login(LoginViewModel vm)
         {
             var result = await _signInManager.PasswordSignInAsync(vm.Username, vm.Password, false, false);
+            await _emailService.SendEmail("aminakram379@gmail.com", "welcome", "you loged in now");
             return RedirectToAction("index", "home");
         }
 
@@ -37,6 +51,29 @@ namespace Blog.Controllers
             return RedirectToAction("index", "Home");
         }
 
+        public IActionResult Register() => View();
 
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel vm)
+        {
+            if (!ModelState.IsValid)
+                return View(vm);
+
+            var user = _mapper.Map<IdentityUser>(vm);
+
+            var result = await _userManager.CreateAsync(user, vm.Password);
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.TryAddModelError(error.Code, error.Description);
+                }
+                return View(vm);
+            }
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            return RedirectToAction("login");
+        }
     }
 }

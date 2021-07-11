@@ -1,10 +1,13 @@
 using Blog.Data;
 using Blog.Data.FileMangers;
 using Blog.Data.Repositories;
+using Blog.Services.Email;
+using Blog.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,16 +31,21 @@ namespace Blog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings")); 
+
+            services.AddControllersWithViews(opt =>
+                opt.CacheProfiles.Add("weekly", new CacheProfile { Duration = 60* 60* 24* 7 })
+            ) ;
 
             services.AddDbContext<AppDbContext>(opt =>
                             opt.UseSqlServer(Configuration["ConnectionStrings:default"]));
-
+            
             services.AddIdentity<IdentityUser, IdentityRole>(opt => {
                 opt.Password.RequiredLength = 5;
                 opt.Password.RequireDigit = false;
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.Password.RequireUppercase = false;
+                opt.Password.RequireLowercase = false;
             })
                 .AddEntityFrameworkStores<AppDbContext>();
 
@@ -51,21 +59,25 @@ namespace Blog
             services.AddScoped<CategoryRepository>();
 
             services.AddTransient<IFileManager, FileManager>();
+
+            services.AddSingleton<EmailService>();
+
+            services.AddAutoMapper(typeof(MappingProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+            //if (env.IsDevelopment())
+            //{
+            //}
+            //else
+            //{
+            //    app.UseExceptionHandler("/Error");
+            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            //    app.UseHsts();
+            //}
                 app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
 
             app.UseStaticFiles();
             app.UseRouting();

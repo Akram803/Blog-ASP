@@ -1,4 +1,5 @@
 ﻿using Blog.Models;
+using Blog.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,19 +25,51 @@ namespace Blog.Data.Repositories
                 throw new NullReferenceException();
         }
 
-        public async Task<List<Post>> GetAll()
+        public async Task<PagedList<Post>> GetPosts(PagingParametersVM pagingParameters, int categoryId, string search)
         {
-            return await _context.Posts.ToListAsync();
+            var query = _context.Posts
+                                .AsNoTracking()
+                                .AsQueryable();
+
+            if (categoryId > 0)
+                query = query.Where(p => p.CategoryId == categoryId);
+
+            if (!string.IsNullOrEmpty(search))
+                query = query.Where(p =>   EF.Functions.Like(p.Title, $"%{search}%")
+                                        || EF.Functions.Like(p.Body, $"%{search}%")
+                                        || EF.Functions.Like(p.Description, $"%{search}%"));
+            // paging
+            int count = await query.CountAsync();
+            query = query
+                    .OrderByDescending(p => p.CreatedAt)
+                    .Skip((pagingParameters.PageNumber - 1) * pagingParameters.PageSize)
+                    .Take(pagingParameters.PageSize);
+            return new PagedList<Post>(
+                                await query.ToListAsync(),
+                                count,
+                                pagingParameters.PageNumber, 
+                                pagingParameters.PageSize
+                            );
+        }
+        
+        public async Task<List<Post>> GetByCategory(Category Cat)
+        {
+            return await _context.Posts
+                                 .OrderByDescending(p => p.CreatedAt)
+                                 .Where(p => p.Category == Cat)
+                                 .ToListAsync();
         }
 
         public async Task<Post> GetById(int id)
         {
             return await _context.Posts
+                            .Include(p => p.Category)
                             .Include(p => p.MainComments)
-                            .ThenInclude(mc => mc.SubComments)
+                                .ThenInclude(mc => mc.SubComments)
                             .FirstOrDefaultAsync(p => p.Id == id);
         }
 
+        
 
         public void Update(Post post)
         {

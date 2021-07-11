@@ -33,16 +33,15 @@ namespace Blog.Controllers
         public async Task<IActionResult> Index()
         {
             return View(
-                await _postRepo.GetAll()
+                await _postRepo.GetPosts(new PagingParametersVM(), 0, "")
                 );
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Post(int id)
-        {
-            var post = await _postRepo.GetById(id);
-            return View(post);
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> Post(int id)
+        //{
+        //    return RedirectToAction("Post", "Home", new { id = id });
+        //}
 
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
@@ -58,6 +57,8 @@ namespace Blog.Controllers
                         Id = post.Id,
                         Title = post.Title,
                         Body = post.Body,
+                        Description = post.Description,
+                        Tags = post.Tags,
                         ImageName = post.Image
                     });
             }
@@ -74,6 +75,8 @@ namespace Blog.Controllers
                 Id = vm.Id,
                 Title = vm.Title,
                 Body = vm.Body,
+                Tags = vm.Tags,
+                Description = vm.Description,
                 CategoryId = vm.CatrgoryId,
                 Image = vm.ImageName
             };

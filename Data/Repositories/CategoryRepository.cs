@@ -13,13 +13,18 @@ namespace Blog.Data.Repositories
         public CategoryRepository(AppDbContext context)
             :base(context)
         {
+        }
+        public async Task<List<Category>> Getall() =>
+            await _context.Categories.ToListAsync();
 
+        public async Task<Category> GetById(int id)
+        {
+            return await _context.Categories.FindAsync(id);
         }
 
-
-        public async Task<List<Category>> Getall()
+        public async Task<Category> GetByName(string name)
         {
-            return await _context.Categories.ToListAsync();
+            return await _context.Categories.FirstOrDefaultAsync(cat => cat.Name == name);
         }
 
         public void Add(Category category)

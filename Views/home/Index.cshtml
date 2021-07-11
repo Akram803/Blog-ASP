@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Post>
+﻿@model PagedList<Post>
 
 <div class="display-4 d-flex justify-content-center align-items-center mb-5"
     style=" width: 100%;
@@ -8,46 +8,94 @@
     <h1 class="display-1 text-muted">Amazing Presonal Blog</h1>
 </div>
 
-<div class="container">
-    <div class="row ">
-        @foreach (var post in Model)
-        {
-            <div class="col-12 col-lg-6 ">
+<div class="container-fluid">
+    <div class="row">
 
-                <div class="card mb-3" style="height:150px;">
-                    <div class="row no-gutters">
-
-                        <div class="col">
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    <a asp-controller="home" asp-action="post" asp-route-id="@post.Id">
-                                        @post.Title
-                                    </a>
-                                </h5>
-                                <p class="card-text">
-                                    @post.Body.Substring(0, @post.Body.Length > 50 ? 50 : @post.Body.Length)
-                                </p>
-                                <p class="card-text">
-                                    <small class="text-muted">created @post.CreatedAt</small>
-                                </p>
-                            </div>
-                        </div>
-
-                        @if (!string.IsNullOrEmpty(post.Image))
-                        {
-                            <div class="col-4 " style="height: 150px;"> 
-                                <img src="/images/@post.Image" class="card-img " style="height: 146px;">
-                            </div>
-                        }
-                        
-
-                    </div>
-                </div>                
+        <div class="col-md-2 row d-md-block ml-1 ml-md-0">
+            <div class="col-2 col-md-12 m-1 badge rounded-pill bg-secondary text-white">
+                0
             </div>
+            @foreach(var cat in (List<Category>)ViewData["cats"])
+            {
+                <a class="col-2 col-md-12 m-1 badge bg-dark text-white "
+                   asp-controller="home" asp-action="index" asp-route-categoryId="@cat.Id"
+                   >
+                    @cat.Name
+                </a>
+            }
 
-        }
+        </div>
+
+        <div class="col-12 col-md-10 col-lg-7 ml-md-1">
+
+            @foreach (var post in Model)
+            {
+                <div class=" ">
+
+                    <div class="card mb-3" style="height:150px;">
+                        <div class="row no-gutters">
+
+                            <div class="col">
+                                <div class="card-body">
+                                    <small class=" card-text text-muted">@post.CreatedAt</small>
+                                    <h5 class="card-title">
+                                        <a asp-controller="home" asp-action="post" asp-route-id="@post.Id">
+                                            @post.Title
+                                        </a>
+                                    </h5>
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(post.Image))
+                            {
+                                <div class="col-4 " style="height: 150px;">
+                                    <img src="@ViewData["Path_Base"]/images/@post.Image" class="card-img " style="height: 146px;">
+                                </div>
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="row justify-content-center ">
+                <ul class="pagination">
+                   @if (Model.HasPrevious)
+                    {
+                        <li class="page-item ">
+                            <a id="prev" class="btn page btn-outline-success"  
+                               asp-route-pageNumber="@(Model.CurrentPage - 1)"
+                               asp-route-pagesize="@(Model.PageSize)"
+                               >
+                                @(Model.CurrentPage - 1)
+                            </a>
+                        </li>
+                    }   
+                    
+                    
+                    <li class="page-item px-1">
+                        <button id="current" class="btn">
+                            @Model.CurrentPage
+                        </button>
+                    </li>
+                    
+                    @if (Model.HasNext)
+                    {
+                        <li class="page-item">
+                            <a id="next" class="btn page btn-outline-success"  
+                               asp-route-pageNumber="@(Model.CurrentPage + 1)"
+                               asp-route-pagesize="@(Model.PageSize)"
+                               >
+                                @(Model.CurrentPage + 1)
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+        </div>
+
+        
+
     </div>
-
-   
-
 </div>

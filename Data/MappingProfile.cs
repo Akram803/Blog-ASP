@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Blog.Models;
 using Blog.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -13,8 +14,13 @@ namespace Blog.Data
     {
         public MappingProfile()
         {
-            CreateMap<RegisterViewModel,IdentityUser >()
+            CreateMap<RegisterViewModel, AppUser>()
                 .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email)) ;
+
+            CreateMap<PostViewModel, Post>()
+                .ForMember(p => p.Image, opt => opt.MapFrom(vm => vm.ImageName));
+            CreateMap<Post, PostViewModel>()
+                .ForMember(vm => vm.ImageName, opt => opt.MapFrom(p => p.Image));
         }
 
     }

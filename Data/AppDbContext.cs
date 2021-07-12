@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Blog.Data
 {
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)

@@ -17,7 +17,7 @@ namespace Blog.Controllers
         public CommentController(CommentRepository repo)
         {
             _commentRepo = repo;
-        }
+        } 
 
 
         [HttpPost]

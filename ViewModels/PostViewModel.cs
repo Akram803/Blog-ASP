@@ -18,14 +18,15 @@ namespace Blog.ViewModels
         public string Body { get; set; }
         public string Description { get; set; }
         public string Tags { get; set; }
-
-
+         
         [Required]
-        public int CatrgoryId{ get; set; }
-
+        public int CategoryId { get; set; }
         public Category Category { get; set; }
 
         public string ImageName { get; set; } = "";
         public IFormFile ImageObj { get; set; }
+
+        public string UserId { get; set; }
+
     }
 }

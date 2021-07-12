@@ -1,6 +1,7 @@
 using Blog.Data;
 using Blog.Data.FileMangers;
 using Blog.Data.Repositories;
+using Blog.Models;
 using Blog.Services.Email;
 using Blog.Settings;
 using Microsoft.AspNetCore.Builder;
@@ -40,7 +41,7 @@ namespace Blog
             services.AddDbContext<AppDbContext>(opt =>
                             opt.UseSqlServer(Configuration["ConnectionStrings:default"]));
             
-            services.AddIdentity<IdentityUser, IdentityRole>(opt => {
+            services.AddIdentity<AppUser, IdentityRole>(opt => {
                 opt.Password.RequiredLength = 5;
                 opt.Password.RequireDigit = false;
                 opt.Password.RequireNonAlphanumeric = false;
@@ -52,6 +53,7 @@ namespace Blog
             services.ConfigureApplicationCookie(config => {
                 config.LoginPath = "/auth/login";
                 config.LogoutPath = "/auth/logout";
+                config.AccessDeniedPath = "/auth/forbid";
             });
 
             services.AddScoped<PostRepository>();

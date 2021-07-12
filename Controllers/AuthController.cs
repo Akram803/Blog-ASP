@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Blog.Models;
 using Blog.Services.Email;
 using Blog.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -13,15 +14,15 @@ namespace Blog.Controllers
 {
     public class AuthController : Controller
     {
-        private SignInManager<IdentityUser> _signInManager;
-        private UserManager<IdentityUser> _userManager;
+        private SignInManager<AppUser> _signInManager;
+        private UserManager<AppUser> _userManager;
         private EmailService _emailService;
         private IMapper _mapper;
 
         public AuthController(
             IMapper mapper,
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
             EmailService emailService
             )
         {
@@ -40,7 +41,7 @@ namespace Blog.Controllers
         public async Task<IActionResult> Login(LoginViewModel vm)
         {
             var result = await _signInManager.PasswordSignInAsync(vm.Username, vm.Password, false, false);
-            await _emailService.SendEmail("aminakram379@gmail.com", "welcome", "you loged in now");
+            //await _emailService.SendEmail("aminakram379@gmail.com", "welcome", "you loged in now");
             return RedirectToAction("index", "home");
         }
 
@@ -59,7 +60,7 @@ namespace Blog.Controllers
             if (!ModelState.IsValid)
                 return View(vm);
 
-            var user = _mapper.Map<IdentityUser>(vm);
+            var user = _mapper.Map<AppUser>(vm);
 
             var result = await _userManager.CreateAsync(user, vm.Password);
             if (!result.Succeeded)
@@ -71,9 +72,14 @@ namespace Blog.Controllers
                 return View(vm);
             }
 
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
             return RedirectToAction("login");
+        }
+
+        public string Forbiden()
+        {
+            return "Forbiden";
         }
     }
 }

@@ -11,5 +11,7 @@ namespace Blog.Models.Comment
     {
         [Required]
         public int MainCommentId { get; set; }
+
+        public AppUser User { get; set; }
     }
 }

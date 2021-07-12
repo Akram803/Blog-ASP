@@ -16,7 +16,7 @@ namespace Blog.Models
         [DisplayName("Title")]
         [Required]
         public string Title { get; set; } = "";
-        [DisplayName("what do you think")]
+        [DisplayName("what do you think")] 
         [Required]
         public string Body { get; set; } = "";
         public string Image { get; set; } = "";
@@ -30,6 +30,10 @@ namespace Blog.Models
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
+        [Required]
+        public string UserId { get; set; }
+        public AppUser User { get; set; }
+        
         public List<MainComment> MainComments { get; set; }
     } 
 }

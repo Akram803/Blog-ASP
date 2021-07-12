@@ -38,15 +38,19 @@ namespace Blog.Data.Repositories
                 query = query.Where(p =>   EF.Functions.Like(p.Title, $"%{search}%")
                                         || EF.Functions.Like(p.Body, $"%{search}%")
                                         || EF.Functions.Like(p.Description, $"%{search}%"));
+
             // paging
             int count = await query.CountAsync();
             query = query
                     .OrderByDescending(p => p.CreatedAt)
                     .Skip((pagingParameters.PageNumber - 1) * pagingParameters.PageSize)
                     .Take(pagingParameters.PageSize);
+
+            query = query.Include(p => p.User);
+
             return new PagedList<Post>(
                                 await query.ToListAsync(),
-                                count,
+                                count, 
                                 pagingParameters.PageNumber, 
                                 pagingParameters.PageSize
                             );
@@ -60,16 +64,37 @@ namespace Blog.Data.Repositories
                                  .ToListAsync();
         }
 
-        public async Task<Post> GetById(int id)
+        public async Task<Post> GetByIdFull(int id)
         {
-            return await _context.Posts
-                            .Include(p => p.Category)
-                            .Include(p => p.MainComments)
-                                .ThenInclude(mc => mc.SubComments)
-                            .FirstOrDefaultAsync(p => p.Id == id);
+            var post = await _context.Posts
+                                .Include(p => p.Category)
+                                .Include(p => p.User)
+                                .Include(p => p.MainComments)
+                                    .ThenInclude(mc => mc.User)
+                                .FirstOrDefaultAsync(p => p.Id == id);
+
+            return post;
+
+
         }
 
-        
+        public async Task<Post> GetById(int id)
+        {
+            var post = await _context.Posts
+                                .Include(p => p.Category)
+                                .Include(p => p.User)
+                                .FirstOrDefaultAsync(p => p.Id == id);
+
+            return post;
+        }
+
+        public async Task<Post> Check(int id)
+        {
+            return await _context.Posts
+                     .AsNoTracking()
+                     .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
 
         public void Update(Post post)
         {

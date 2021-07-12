@@ -13,14 +13,15 @@
 
         <h1 class="display-4">@Model.Title</h1>
 
-        <p class="text-muted">
+        <div class="text-muted">By: @Model.User.UserName</div>
+        <div class="text-muted">@Model.CreatedAt</div>
+
+        <div class="text-muted">
             category: 
             <a asp-controller="home" asp-action="index" asp-route-category="@Model.Category.Name">
                 @Model.Category.Name
             </a>
-        </p>
-
-        <p class="text-muted">@Model.CreatedAt</p>
+        </div>
         <br />
         @if (!string.IsNullOrEmpty(Model.Image))
         {
@@ -48,16 +49,20 @@
         @foreach (var mainComment in Model.MainComments)
         {
             <hr class="w-50" />
+            <div class="text-muted">@Model.User.UserName</div>
             <small class="text-muted">@mainComment.CreatedAt</small>
-            <p>@mainComment.message</p>
+            <p class="ml-2">@mainComment.message</p>
 
-            <div class="ml-5">
-                @foreach (var subComment in mainComment.SubComments)
-                {
-                <small class="text-muted">@subComment.CreatedAt</small>
-                <p>@subComment.message</p>
-                }
-            </div>
+            @if (mainComment.SubComments != null)
+            {
+                <div class="ml-5">
+                    @foreach (var subComment in mainComment.SubComments)
+                    {
+                        <small class="text-muted">@subComment.CreatedAt</small>
+                        <p>@subComment.message</p>
+                    }
+                </div>
+            }
 
             await Html.RenderPartialAsync("_CommentForm", new CommentViewModel { PostId = Model.Id, MainCommentId = mainComment.Id });
         }

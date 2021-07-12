@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Blog.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin")]
     public class PanelController : Controller
     {
         private PostRepository _postRepo;
@@ -30,12 +30,12 @@ namespace Blog.Controllers
             _fileManager = fileManager;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            return View(
-                await _postRepo.GetPosts(new PagingParametersVM(), 0, "")
-                );
-        }
+        //public async Task<IActionResult> Index()
+        //{
+        //    return View(
+        //        await _postRepo.GetPosts(new PagingParametersVM(), 0, "")
+        //        );
+        //}
 
         //[HttpGet]
         //public async Task<IActionResult> Post(int id)
@@ -50,7 +50,7 @@ namespace Blog.Controllers
 
             if (id != null)
             {
-                var post = await _postRepo.GetById((int)id);
+                var post = await _postRepo.GetByIdFull((int)id);
                 return View(
                     new PostViewModel
                     {
@@ -77,7 +77,7 @@ namespace Blog.Controllers
                 Body = vm.Body,
                 Tags = vm.Tags,
                 Description = vm.Description,
-                CategoryId = vm.CatrgoryId,
+                CategoryId = vm.CategoryId,
                 Image = vm.ImageName
             };
 
@@ -106,7 +106,7 @@ namespace Blog.Controllers
         [HttpGet]
         public async Task<IActionResult> delete(int id) 
         {
-            var post = await _postRepo.GetById(id);
+            var post = await _postRepo.GetByIdFull(id);
 
             if( !string.IsNullOrEmpty(post.Image) )
                 _fileManager.ImageDelete(post.Image);

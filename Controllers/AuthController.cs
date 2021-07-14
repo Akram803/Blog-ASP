@@ -2,6 +2,7 @@
 using Blog.Models;
 using Blog.Services.Email;
 using Blog.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -38,6 +39,8 @@ namespace Blog.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel vm)
         {
             var result = await _signInManager.PasswordSignInAsync(vm.Username, vm.Password, false, false);

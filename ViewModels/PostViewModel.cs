@@ -26,7 +26,5 @@ namespace Blog.ViewModels
         public string ImageName { get; set; } = "";
         public IFormFile ImageObj { get; set; }
 
-        public string UserId { get; set; }
-
     }
 }

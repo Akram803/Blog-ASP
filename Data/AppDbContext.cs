@@ -21,5 +21,23 @@ namespace Blog.Data
         public DbSet<MainComment> MainComments { get; set; } 
         public DbSet<SubComment> SubComments { get; set; } 
         public DbSet<Category> Categories { get; set; }
+
+        // ========  default is Cascading ============
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //modelBuilder.Entity<Category>()
+        //    .HasMany(c => c.Posts)
+        //    .WithOne(p => p.Category)
+        //    .HasForeignKey(p => p.CategoryId)
+        //    .OnDelete(DeleteBehavior.SetNull);
+
+        //modelBuilder.Entity<Post>()
+        //    .HasMany(p => p.MainComments)
+        //    .WithOne(mc => mc.Post)
+        //    .HasForeignKey(mc => mc.PostId)
+        //    .OnDelete(DeleteBehavior.Cascade);
+
+        //}
+
     }
 }

@@ -15,5 +15,9 @@ namespace Blog.Models.Comment
         public string message { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now ;
+
+        public string UserId { get; set; }
+        public AppUser User { get; set; }
+
     }
 }

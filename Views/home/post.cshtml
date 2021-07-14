@@ -1,9 +1,14 @@
 ﻿@model Post
 
-@{ 
+@using System.Security.Claims;
+
+
+@{
     ViewData["Title"] = Model.Title;
     ViewData["Description"] = Model.Description;
     ViewData["keywords"] = Model.Tags;
+
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
 
@@ -17,11 +22,27 @@
         <div class="text-muted">@Model.CreatedAt</div>
 
         <div class="text-muted">
-            category: 
+            category:
             <a asp-controller="home" asp-action="index" asp-route-category="@Model.Category.Name">
                 @Model.Category.Name
             </a>
         </div>
+        @if (userId == Model.UserId)
+        {
+            <a asp-controller="home" asp-action="CreateOrEdit" asp-route-id="@Model.Id">
+                Edit
+            </a>
+            <a asp-controller="home" asp-action="delete" asp-route-id="@Model.Id">
+                Delete
+            </a>
+        }
+        else if (User.IsInRole("admin"))
+        {
+            <div>
+                <a class="text-danger" asp-controller="panel" asp-action="delete" asp-route-id="@Model.Id">delete</a>
+            </div>
+        }
+
         <br />
         @if (!string.IsNullOrEmpty(Model.Image))
         {
@@ -49,8 +70,16 @@
         @foreach (var mainComment in Model.MainComments)
         {
             <hr class="w-50" />
-            <div class="text-muted">@Model.User.UserName</div>
+            <div class="text-muted">@mainComment.User.UserName</div>
             <small class="text-muted">@mainComment.CreatedAt</small>
+            @if (userId == mainComment.UserId)
+            {
+                <a class="text-muted"
+                   asp-controller="comment" asp-action="deleteMainComment" asp-route-id="@mainComment.Id">
+                    delete
+                </a>
+            }
+            
             <p class="ml-2">@mainComment.message</p>
 
             @if (mainComment.SubComments != null)
@@ -58,8 +87,17 @@
                 <div class="ml-5">
                     @foreach (var subComment in mainComment.SubComments)
                     {
+                        <div class="text-muted">@subComment.User.UserName</div>
                         <small class="text-muted">@subComment.CreatedAt</small>
+                         @if (userId == subComment.UserId)
+                        {
+                             <a class="text-muted"
+                                asp-controller="comment" asp-action="deleteSubComment" asp-route-id="@subComment.Id">
+                                delete
+                            </a>
+                        }
                         <p>@subComment.message</p>
+                       
                     }
                 </div>
             }

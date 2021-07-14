@@ -59,7 +59,7 @@ namespace Blog.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> CreateOrEdit(int? id)
         {
             ViewData["cats"] = await _catRepo.Getall();
 
@@ -70,24 +70,61 @@ namespace Blog.Controllers
                 if (post.UserId != userId)
                     return NotFound();
 
+                ViewData["postAction"] = "edit";
                 return View(
                     _mapper.Map<PostViewModel>(post)
                     );
             }
+            ViewData["postAction"] = "create";
             return View(new PostViewModel());
         }
 
+        // create
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Create(PostViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewData["cats"] = await _catRepo.Getall();
+                ViewData["postAction"] = "create";
+                return View("CreateOrEdit", vm);
+            }
+
+            // Map ViewModel To model
+            Post post = _mapper.Map<Post>(vm);
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            post.UserId = userId;
+
+            if (vm.ImageObj != null)
+                post.Image = await _fileManager.ImageSave(vm.ImageObj);
+
+            await _postRepo.Add(post);
+
+            await _postRepo.SaveChanges();
+            return RedirectToAction("Index");
+            
+        }
         // create or update
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Edit(PostViewModel vm)
         {
             if (!ModelState.IsValid)
-                return View(vm);
+            {
+                ViewData["cats"] = await _catRepo.Getall();
+                ViewData["postAction"] = "create";
+                return View("CreateOrEdit", vm);
+            }
 
             // Map ViewModel To model
             Post post = _mapper.Map<Post>(vm);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if ((await _postRepo.Check(post.Id)).UserId != userId)
+                return NotFound();
+            post.UserId = userId;
 
             if (vm.ImageObj != null)
             {
@@ -97,24 +134,16 @@ namespace Blog.Controllers
                 post.Image = await _fileManager.ImageSave(vm.ImageObj);
             }
 
-            // creation 
-            if (post.Id == 0)
-            {
-                post.UserId = userId;
-                await _postRepo.Add(post);
-            }
-            // update
-            else
-            {
-                if ((await _postRepo.Check(post.Id)).UserId != userId)
-                    return NotFound();
-                _postRepo.Update(post);
-            }
+            _postRepo.Update(post);
 
             if (await _postRepo.SaveChanges())
                 return RedirectToAction("Index");
             else
-                return View(post);
+            {
+                ViewData["cats"] = await _catRepo.Getall();
+                ViewData["postAction"] = "create";
+                return View("CreateOrEdit", vm);
+            }
         }
 
         [HttpGet]
@@ -123,6 +152,7 @@ namespace Blog.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var post = await _postRepo.GetById(id);
+
             if (post.UserId != userId)
                 return Forbid();
 
@@ -134,6 +164,7 @@ namespace Blog.Controllers
 
             return RedirectToAction("index", "home");
         }
+
 
         [HttpGet("/images/{name}")]
         [ResponseCache(CacheProfileName = "weekly")]

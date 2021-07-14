@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Blog.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin")]
     public class CategoryController : Controller
     {
         private CategoryRepository _categoryRepo;

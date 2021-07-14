@@ -11,8 +11,8 @@ namespace Blog.Models.Comment
     {
         [Required]
         public int PostId { get; set; }
+        public Post Post { get; set; }
         public List<SubComment> SubComments { get; set; }
 
-        public AppUser User { get; set; }
     }
 }

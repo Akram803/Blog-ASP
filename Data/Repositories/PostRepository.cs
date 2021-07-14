@@ -71,6 +71,9 @@ namespace Blog.Data.Repositories
                                 .Include(p => p.User)
                                 .Include(p => p.MainComments)
                                     .ThenInclude(mc => mc.User)
+                                .Include(p => p.MainComments)
+                                    .ThenInclude(mc => mc.SubComments )
+                                        .ThenInclude(sc => sc.User)
                                 .FirstOrDefaultAsync(p => p.Id == id);
 
             return post;

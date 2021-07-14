@@ -15,12 +15,19 @@
             <div class="col-2 col-md-12 m-1 badge rounded-pill bg-secondary text-white">
                 Categories
             </div>
-            @foreach(var cat in (List<Category>)ViewData["Categories"])
+            @foreach (var cat in (List<Category>)ViewData["Categories"])
             {
                 <a class="col-2 col-md-12 m-1 badge bg-dark text-white "
-                   asp-controller="home" asp-action="index" asp-route-categoryId="@cat.Id"
-                   >
+                   asp-controller="home" asp-action="index" asp-route-categoryId="@cat.Id">
                     @cat.Name
+                </a>
+            }
+
+            @if (User.IsInRole("admin"))
+            {
+                <a class="col-2 col-md-12 m-1 badge rounded-pill bg-secondary text-white"
+                   asp-controller="Category" asp-action="index">
+                    Edit Categories
                 </a>
             }
 

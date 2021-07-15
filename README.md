@@ -9,16 +9,16 @@ The system has two types of users: anonymous visitors and signed users. The last
 
 #### Some Snapshots
 ##### Home Page
-![image info](https://drive.google.com/uc?export=download&id=11RlcymEIu17JgNMoJhM-PvvK7Kfh8N4-) \
+![image info](https://drive.google.com/uc?export=download&id=11RlcymEIu17JgNMoJhM-PvvK7Kfh8N4-)
 
 ##### home page with query parameters
-![image info](https://drive.google.com/uc?export=download&id=1zl1pgcfDXRR3Al59iPvOm5aJZQjzGGa9) \
+![image info](https://drive.google.com/uc?export=download&id=1zl1pgcfDXRR3Al59iPvOm5aJZQjzGGa9)
 
 ##### Comments Section
-![image info](https://drive.google.com/uc?export=download&id=1hvfCG6bue9v1dMdX1yMQ1q948NB0I722) \
+![image info](https://drive.google.com/uc?export=download&id=1hvfCG6bue9v1dMdX1yMQ1q948NB0I722)
 
 ##### Post Page
-![image info](https://drive.google.com/uc?export=download&id=1z-VvJMuVr_Oa_nlM8nX9D9tuqBo1WYMD) \
+![image info](https://drive.google.com/uc?export=download&id=1z-VvJMuVr_Oa_nlM8nX9D9tuqBo1WYMD)
 
 ##### Post Form
 ![image info](https://drive.google.com/uc?export=download&id=15GXgTeplLhwxHeiozsMuKVA0stCeq9p5)
@@ -26,3 +26,6 @@ The system has two types of users: anonymous visitors and signed users. The last
 
 ##### Admin Can Delete Any Content 
 ![image info](https://drive.google.com/uc?export=download&id=1d06IueMbNRnSwt996kxfKyrIcHGg1TVB)
+
+##### Stupid Account page 
+![image info](https://drive.google.com/uc?export=download&id=1ocv3VkLo4vK02vtxC_i6MPQzzFjgMM2P)

@@ -8,18 +8,18 @@ The system has two types of users: anonymous visitors and signed users. The last
 
 
 #### Some Snapshots
-Home Page
+##### Home Page
 ![image info](https://drive.google.com/uc?export=download&id=11RlcymEIu17JgNMoJhM-PvvK7Kfh8N4-)
-\
-home page with query parameters
+. \
+##### home page with query parameters
 ![image info](https://drive.google.com/uc?export=download&id=1zl1pgcfDXRR3Al59iPvOm5aJZQjzGGa9)
-\
-Comments Section
+. \
+##### Comments Section
 ![image info](https://drive.google.com/uc?export=download&id=1hvfCG6bue9v1dMdX1yMQ1q948NB0I722)
-<br />
-Post Page
+. \
+##### Post Page
 ![image info](https://drive.google.com/uc?export=download&id=1z-VvJMuVr_Oa_nlM8nX9D9tuqBo1WYMD)
-<br />
-Post Form
+. \
+##### Post Form
 ![image info](https://drive.google.com/uc?export=download&id=15GXgTeplLhwxHeiozsMuKVA0stCeq9p5)
 ![image info](https://drive.google.com/uc?export=download&id=1LdD5brNnmuPFL2M_q5MdkpX1VvxwrOxR)

@@ -10,10 +10,10 @@ The system has two types of users: anonymous visitors and signed users. The last
 #### Some Snapshots
 Home Page
 ![image info](https://drive.google.com/uc?export=download&id=11RlcymEIu17JgNMoJhM-PvvK7Kfh8N4-)
-<br />
+\
 home page with query parameters
 ![image info](https://drive.google.com/uc?export=download&id=1zl1pgcfDXRR3Al59iPvOm5aJZQjzGGa9)
-<br />
+\
 Comments Section
 ![image info](https://drive.google.com/uc?export=download&id=1hvfCG6bue9v1dMdX1yMQ1q948NB0I722)
 <br />

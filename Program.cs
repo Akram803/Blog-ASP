@@ -47,7 +47,8 @@ namespace Blog
                     var adminUser = new IdentityUser()
                     {
                         UserName = "admin",
-                        Email = "admin@site.com"
+                        Email = "admin@site.com",
+                        EmailConfirmed = true
                     };
                     // add created user to BD
                     var done = UserMgr.CreateAsync(adminUser, "admin").GetAwaiter().GetResult();

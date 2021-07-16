@@ -55,14 +55,6 @@ namespace Blog.Data.Repositories
                                 pagingParameters.PageSize
                             );
         }
-        
-        public async Task<List<Post>> GetByCategory(Category Cat)
-        {
-            return await _context.Posts
-                                 .OrderByDescending(p => p.CreatedAt)
-                                 .Where(p => p.Category == Cat)
-                                 .ToListAsync();
-        }
 
         public async Task<Post> GetByIdFull(int id)
         {
@@ -89,6 +81,13 @@ namespace Blog.Data.Repositories
                                 .FirstOrDefaultAsync(p => p.Id == id);
 
             return post;
+        }
+
+        public async Task<List<Post>> GetByUserId(string id)
+        {
+            return await _context.Posts
+                            .Where(p => p.UserId == id)
+                            .ToListAsync();
         }
 
         public async Task<Post> Check(int id)

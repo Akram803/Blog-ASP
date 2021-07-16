@@ -16,31 +16,21 @@ namespace Blog.Controllers
     public class PanelController : Controller
     {
         private PostRepository _postRepo;
+        private CommentRepository _commentRepo;
         private CategoryRepository _categoryRepo;
         private IFileManager _fileManager;
 
         public PanelController(
                                 PostRepository postRepo, 
                                 CategoryRepository catRepo, 
+                                CommentRepository commentRepo,
                                 IFileManager fileManager
                                 )
         {
             _postRepo = postRepo;
             _categoryRepo = catRepo;
+            _commentRepo = commentRepo;
             _fileManager = fileManager;
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            return View(
-                await _postRepo.GetPosts(new PagingParametersVM(), 0, "")
-                );
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Post(int id)
-        {
-            return RedirectToAction("Post", "Home", new { id = id });
         }
 
 
@@ -57,6 +47,38 @@ namespace Blog.Controllers
 
             return RedirectToAction("index", "home");
         }
+
+        public async Task<IActionResult> deleteMainComment(int id)
+        {
+            var comment = await _commentRepo.GetMainById(id);
+            if (comment == null)
+                return NotFound();
+
+            var PostId = comment.PostId;
+            _commentRepo.deleteMain(comment);
+            await _commentRepo.SaveChanges();
+
+            return RedirectToAction("post", "home", new { id = PostId });
+        }
+
+
+        public async Task<IActionResult> deleteSubComment(int id)
+        {
+            var comment = await _commentRepo.GetSubById(id);
+            if (comment == null)
+                return NotFound();
+
+            var PostId = (await _commentRepo.GetMainById(
+                                        comment.MainCommentId
+                                        )).PostId;
+
+            _commentRepo.deleteSub(comment);
+            await _commentRepo.SaveChanges();
+
+
+            return RedirectToAction("post", "home", new { id = PostId });
+        }
+
 
     }
 }

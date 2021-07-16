@@ -14,8 +14,8 @@ namespace Blog.Data
     {
         public MappingProfile()
         {
-            CreateMap<RegisterViewModel, AppUser>()
-                .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email)) ;
+            CreateMap<RegisterViewModel, AppUser>();
+                //.ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email)) ;
 
             CreateMap<PostViewModel, Post>()
                 .ForMember(p => p.Image, opt => opt.MapFrom(vm => vm.ImageName));

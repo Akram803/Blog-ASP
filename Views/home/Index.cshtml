@@ -48,10 +48,12 @@
 
                             <div class="col">
                                 <div class="card-body">
-                                    <small class=" card-text text-muted">@post.User.UserName</small> 
+                                    <small class=" card-text text-muted">
+                                        @post.User.FirstName @post.User.LastName
+                                    </small> 
                                     <br />
                                     <small class=" card-text text-muted">
-                                        @post.CreatedAt
+                                        @post.CreatedAt.ToLongDateString()
                                     </small>
                                     <h5 class="card-title">
                                         <a asp-controller="home" asp-action="post" asp-route-id="@post.Id">

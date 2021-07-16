@@ -38,6 +38,12 @@ namespace Blog.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -333,7 +339,7 @@ namespace Blog.Migrations
 
             modelBuilder.Entity("Blog.Models.Comment.MainComment", b =>
                 {
-                    b.HasOne("Blog.Models.Post", null)
+                    b.HasOne("Blog.Models.Post", "Post")
                         .WithMany("MainComments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -342,6 +348,8 @@ namespace Blog.Migrations
                     b.HasOne("Blog.Models.AppUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Post");
 
                     b.Navigation("User");
                 });

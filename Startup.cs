@@ -47,7 +47,10 @@ namespace Blog
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.Password.RequireUppercase = false;
                 opt.Password.RequireLowercase = false;
+
+                //opt.SignIn.RequireConfirmedEmail = true;
             })
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<AppDbContext>();
 
             services.ConfigureApplicationCookie(config => {
@@ -65,6 +68,7 @@ namespace Blog
             services.AddSingleton<EmailService>();
 
             services.AddAutoMapper(typeof(MappingProfile));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -18,7 +18,9 @@
 
         <h1 class="display-4">@Model.Title</h1>
 
-        <div class="text-muted">By: @Model.User.UserName</div>
+        <a class="text-muted" asp-controller="account" asp-action="index" asp-route-username="@Model.User.UserName">
+            By: @Model.User.FirstName @Model.User.LastName
+        </a>
         <div class="text-muted">@Model.CreatedAt</div>
 
         <div class="text-muted">
@@ -70,7 +72,10 @@
         @foreach (var mainComment in Model.MainComments)
         {
             <hr class="w-50" />
-            <div class="text-muted">@mainComment.User.UserName</div>
+            <a class="text-muted"
+               asp-controller="account" asp-action="index" asp-route-username="@mainComment.User.UserName">
+                @mainComment.User.UserName
+            </a><br />
             <small class="text-muted">@mainComment.CreatedAt</small>
             @if (userId == mainComment.UserId)
             {
@@ -79,7 +84,14 @@
                     delete
                 </a>
             }
-            
+            else if (User.IsInRole("admin"))
+            {
+                    <a class="text-danger"
+                       asp-controller="panel" asp-action="deletemainComment" asp-route-id="@Model.Id">
+                    delete
+                    </a>
+            }
+
             <p class="ml-2">@mainComment.message</p>
 
             @if (mainComment.SubComments != null)
@@ -87,17 +99,29 @@
                 <div class="ml-5">
                     @foreach (var subComment in mainComment.SubComments)
                     {
-                        <div class="text-muted">@subComment.User.UserName</div>
+                        <a class="text-muted" 
+                           asp-controller="account" asp-action="index" asp-route-username="@subComment.User.UserName">
+                            @subComment.User.UserName
+                        </a><br />
                         <small class="text-muted">@subComment.CreatedAt</small>
-                         @if (userId == subComment.UserId)
+                        @if (userId == subComment.UserId)
                         {
-                             <a class="text-muted"
-                                asp-controller="comment" asp-action="deleteSubComment" asp-route-id="@subComment.Id">
+                            <a class="text-muted"
+                               asp-controller="comment" asp-action="deleteSubComment" asp-route-id="@subComment.Id">
                                 delete
                             </a>
+                        }else if (User.IsInRole("admin"))
+                        {
+                            <a>
+                                <a class="text-danger"
+                                   asp-controller="panel" asp-action="deleteSubComment" asp-route-id="@Model.Id">
+                                delete
+                                </a>
+                            </a>
                         }
+
                         <p>@subComment.message</p>
-                       
+
                     }
                 </div>
             }

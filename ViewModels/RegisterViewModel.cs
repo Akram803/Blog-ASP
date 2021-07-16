@@ -9,6 +9,9 @@ namespace Blog.ViewModels
 {
     public class RegisterViewModel
     {
+        [Required]
+        public string UserName { get; set; }
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
 

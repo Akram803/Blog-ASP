@@ -44,8 +44,6 @@ namespace Blog.Controllers
                     pagingParameters, categoryId, search
                     )
                 );
-
-
         }
 
         [HttpGet]

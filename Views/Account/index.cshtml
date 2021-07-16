@@ -1,0 +1,55 @@
+﻿@model AppUser
+
+
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+      
+
+        <div class="col-12 col-md-10 col-lg-7 ml-md-1">
+
+            <h5>Username: @Model.UserName</h5>
+            <h5>Number Of Posts: @Model.Posts?.Count()</h5>
+            <hr />
+            <br />
+
+            @foreach (var post in Model.Posts)
+            {
+                <div class=" ">
+
+                    <div class="card mb-3" style="height:150px;">
+                        <div class="row no-gutters">
+
+                            <div class="col">
+                                <div class="card-body">
+                                    <small class=" card-text text-muted">
+                                        @post.CreatedAt
+                                    </small>
+                                    <h5 class="card-title">
+                                        <a asp-controller="home" asp-action="post" asp-route-id="@post.Id">
+                                            @post.Title
+                                        </a>
+                                    </h5>
+
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(post.Image))
+                            {
+                                <div class="col-4 " style="height: 150px;">
+                                    <img src="@ViewData["Path_Base"]/images/@post.Image" class="card-img " style="height: 146px;">
+                                </div>
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+
+
+    </div>
+</div>

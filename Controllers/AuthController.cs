@@ -43,9 +43,26 @@ namespace Blog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel vm)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
             var result = await _signInManager.PasswordSignInAsync(vm.Username, vm.Password, false, false);
-            //await _emailService.SendEmail("aminakram379@gmail.com", "welcome", "you loged in now");
-            return RedirectToAction("index", "home");
+            if (result.Succeeded)
+            {
+                //await _emailService.SendEmail("aminakram379@gmail.com", "welcome", "you loged in now");
+                return RedirectToAction("index", "home");
+            }
+            else
+            {
+
+                ModelState.AddModelError("", "Invalid Login Attempt");
+                //await _userManager.IsEmailConfirmedAsync();
+                return View();
+            }
+            
+            
         }
 
         public async Task<IActionResult> logOut()
@@ -65,6 +82,7 @@ namespace Blog.Controllers
 
             var user = _mapper.Map<AppUser>(vm);
 
+
             var result = await _userManager.CreateAsync(user, vm.Password);
             if (!result.Succeeded)
             {
@@ -75,14 +93,36 @@ namespace Blog.Controllers
                 return View(vm);
             }
 
-            //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            return RedirectToAction("login");
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = Url.Action("ConfirmEmail" , "Auth", new { token = token, email = user.Email });
+
+            //await _emailService.SendEmail(user.Email,
+            //                            "Blogy Email Confirmation", 
+            //                            $"Confirmation email link {confirmationLink}");
+
+            return View("SuccessRegistration");
         }
 
-        public string Forbiden()
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
-            return "Forbiden";
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                //return View("Error");
+                return NotFound();
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+                return View();
+            else
+                return NotFound();
+             
+        }
+
+        public IActionResult Forbiden()
+        {
+            return View();
         }
     }
 }

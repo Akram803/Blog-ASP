@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using Blog.Data.Repositories;
 using Blog.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,6 +41,48 @@ namespace Blog.Controllers
 
             return View(user);
         }
+
+        [Authorize]
+        public async Task<IActionResult> Follow(string username)
+        {
+            var Bloger = await _userManager.FindByNameAsync(username);
+            if (Bloger == null)
+                return NotFound();
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUser = await _userManager.Users
+                                            .Include(u => u.FollwedBlogers)
+                                            .FirstOrDefaultAsync(u=>u.Id==userId);
+
+            currentUser.FollwedBlogers.Add(Bloger);
+
+             await _postRepo.SaveChanges();
+
+            return RedirectToAction("index", new { username = username });
+        }
+
+        [Authorize]
+        public async Task<IActionResult> UnFollow(string username)
+        {
+            var Bloger = await _userManager.FindByNameAsync(username);
+            if (Bloger == null)
+                return NotFound();
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUser = await _userManager.Users
+                                            .Include(u => u.FollwedBlogers)
+                                            .FirstOrDefaultAsync(u => u.Id == userId);
+
+            currentUser.FollwedBlogers.Remove(Bloger);
+
+            await _postRepo.SaveChanges();
+
+            return RedirectToAction("index", new { username = username });
+
+        }
+
+
+
 
     }
 }

@@ -19,6 +19,21 @@ namespace Blog.Migrations
                 .HasAnnotation("ProductVersion", "5.0.7")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("AppUserAppUser", b =>
+                {
+                    b.Property<string>("FoLowersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FollwedBlogersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("FoLowersId", "FollwedBlogersId");
+
+                    b.HasIndex("FollwedBlogersId");
+
+                    b.ToTable("AppUserAppUser");
+                });
+
             modelBuilder.Entity("Blog.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -335,6 +350,21 @@ namespace Blog.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("AppUserAppUser", b =>
+                {
+                    b.HasOne("Blog.Models.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("FoLowersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Blog.Models.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("FollwedBlogersId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Blog.Models.Comment.MainComment", b =>

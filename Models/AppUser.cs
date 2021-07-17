@@ -13,5 +13,8 @@ namespace Blog.Models
         public string LastName { get; set; } = "";
         
         public List<Post> Posts { get; set; }
+
+        public List<AppUser> FollwedBlogers { get; set; }
+        public List<AppUser> FoLowers { get; set; }
     }
 }

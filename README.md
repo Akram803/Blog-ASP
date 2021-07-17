@@ -4,9 +4,9 @@ This is a simple Blog Site that allows users to share and manipulate rich posts 
 The system has two types of users: anonymous visitors and signed users. The last one contains admins so We have three levels of authority. \
 **anonymous**  visitors: are allowed to navigate posts, comments and user’s pages. \
 **signed users**: are able to create, edit or delete posts in addition to reply to comments too.\
-### [>> see system architures <<](https://drive.google.com/file/d/1Z8DQuGfGRRX_ZGOCEKQZRGrNQTfWwtc0/view?usp=sharing)
+### [>> see system architures <<](https://drive.google.com/uc?export=download&id=1Qk8nwzuWEmgkqeTjiMY_x2vdSduVm11x)
 
-![systen on scope](https://drive.google.com/uc?export=download&id=1p0psRM5xcwIhmuNNnPkvZt6Y9xDotw9O)
+![systen on scope](https://drive.google.com/file/d/1Qk8nwzuWEmgkqeTjiMY_x2vdSduVm11x/view?usp=sharing)
 
 ### Some Snapshots
 ##### Home Page

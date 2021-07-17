@@ -6,7 +6,7 @@ The system has two types of users: anonymous visitors and signed users. The last
 **signed users**: are able to create, edit or delete posts in addition to reply to comments too.\
 ### [>> see system architures <<](https://drive.google.com/uc?export=download&id=1Qk8nwzuWEmgkqeTjiMY_x2vdSduVm11x)
 
-![systen on scope](https://drive.google.com/file/d/1Qk8nwzuWEmgkqeTjiMY_x2vdSduVm11x/view?usp=sharing)
+![systen on scope](https://drive.google.com/uc?export=download&id=1yibvo_oUZ1cEe4PDFrFN7ejOq4ITnhFZ)
 
 ### Some Snapshots
 ##### Home Page

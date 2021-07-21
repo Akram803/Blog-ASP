@@ -32,11 +32,11 @@
             <h5>Number Of Posts: @Model.Posts?.Count()</h5>
             @if (isFollow)
             {
-                <a asp-controller="account" asp-action="UnFollow" asp-route-username="@Model.UserName">unfollow</a>
+                <a class="btn btn-primary" asp-controller="account" asp-action="UnFollow" asp-route-username="@Model.UserName">unfollow</a>
             }
             else
             {
-                <a asp-controller="account" asp-action="Follow" asp-route-username="@Model.UserName">follow</a>
+                <a class="btn btn-primary" asp-controller="account" asp-action="Follow" asp-route-username="@Model.UserName">follow</a>
 
             }
 
@@ -83,3 +83,6 @@
 
     </div>
 </div>
+
+    
+}
